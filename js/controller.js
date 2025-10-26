@@ -53,14 +53,14 @@ export class ChatController {
      * Sends a user message and generates a corresponding bot response.
      * @param {string} text - The message text entered by the user.
      */
-    sendMessage(text) {
+    async sendMessage(text) {
         try {
             // Add user message
             const newMessage = this.model.add(text, 'user');
             this.listView.renderMessage(newMessage);
 
             // Generate bot response
-            const botText = getAIResponse(text);
+            const botText = await getAIResponse(text);
 
             // Add the bot message
             const botMessage = this.model.add(botText, 'bot');
@@ -77,7 +77,7 @@ export class ChatController {
      * Edits a user message and regenerates the related bot response.
      * @param {string} id - The ID of the message to edit.
      */
-    editMessage(id) {
+    async editMessage(id) {
         const messages = this.model.getAll();
         const message = messages.find(msg => msg.id === id);
         if (!message) return;
@@ -97,7 +97,7 @@ export class ChatController {
 
         // If there’s a bot reply, update it too
         if (nextMessage && nextMessage.sender === 'bot') {
-            const newBotText = getAIResponse(newText);
+            const newBotText = await getAIResponse(newText);
             this.model.edit(nextMessage.id, newBotText);
         }
 

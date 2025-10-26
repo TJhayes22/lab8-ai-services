@@ -13,8 +13,8 @@ export function setModel(modelName) {
 
 /**
  * Gets a response from the currently selected AI model.
- * @param {string} prompt - The user input to send to the AI model.
- * @returns {Promise<string>} - The model's response text.
+ * @param {string} user_prompt - The user input to send to the AI model.
+ * @returns {string} - The model's response text.
  */
 export async function getAIResponse(user_prompt) {
   switch (currentModel) {

@@ -326,7 +326,7 @@ export class ChatView extends HTMLElement {
 
         // Store handlers as properties so they can be removed later
         this._sendHandler = () => {
-            const text = this.messageBox.value.trim();
+            const text = this.messageBox.value;
             if (!text) return;
             this.dispatchEvent(new CustomEvent('message-send', { detail: text }));
             this.messageBox.value = '';
