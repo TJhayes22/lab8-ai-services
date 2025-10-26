@@ -2,21 +2,28 @@ import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req, res) {
   try {
-    // Get API key from Netlify environment variables
+    // Get the API key from Netlify environment variables
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       throw new Error("Missing GEMINI_API_KEY in environment variables.");
     }
 
-    const genAI = new GoogleGenAI(apiKey);
+    const ai = new GoogleGenAI({ apiKey });
 
     // Parse incoming prompt
     const { prompt } = JSON.parse(req.body);
+    if (!prompt || typeof prompt !== "string") {
+      return res.status(400).json({ error: "Invalid prompt" });
+    }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-    const result = await model.generateContent(prompt);
+    // Generate response
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
 
-    const text = result.response.text();
+    // Access the generated text safely
+    const text = response?.content?.[0]?.text || "No response";
 
     return res.status(200).json({ text });
 

@@ -27,12 +27,12 @@ export async function getAIResponse(user_prompt) {
   }
 }
 
-async function getGeminiResponse(prompt) {
+async function getGeminiResponse(user_prompt) {
   try {
     const response = await fetch('/.netlify/functions/gemini', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt }),
+      body: JSON.stringify({ user_prompt }),
     });
     const data = await response.json();
     return data.reply;
