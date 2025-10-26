@@ -1,21 +1,27 @@
 import { GoogleGenAI } from "@google/genai";
-import { GEMINI_API_KEY } from "./env.js";
 
-// The client gets the API key from the environment variable `GEMINI_API_KEY`.
-const ai = new GoogleGenAI(GEMINI_API_KEY);
-
-export async function getGeminiResponse(prompt) {
+export default async function handler(req, res) {
   try {
-    const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: prompt
-  });
-  console.log(response.text);
-  } catch (err) {
-    console.error("Gemini error: ", err);
-    return "Sorry, Gemini couldn't respond right now.";
-  }
-  return response.text;
-}
+    // Get API key from Netlify environment variables
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error("Missing GEMINI_API_KEY in environment variables.");
+    }
 
-// getGeminiResponse();
+    const genAI = new GoogleGenAI(apiKey);
+
+    // Parse incoming prompt
+    const { prompt } = JSON.parse(req.body);
+
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const result = await model.generateContent(prompt);
+
+    const text = result.response.text();
+
+    return res.status(200).json({ text });
+
+  } catch (err) {
+    console.error("Gemini error:", err);
+    return res.status(500).json({ error: err.message });
+  }
+}

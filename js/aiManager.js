@@ -1,17 +1,43 @@
 import { getBotResponse } from './eliza.js';
 
-let currentModel = 'eliza';
 
+let currentModel = 'gemini';
+
+/**
+ * Sets the current AI model to use.
+ * @param {string} modelName - The name of the model (e.g., "gemini" or "eliza").
+ */
 export function setModel(modelName) {
-    currentModel = modelName;
+  currentModel = modelName;
 }
 
-export async function getAIResponse(prompt) {
-    switch (currentModel) {
-        case 'gemini':
-            return await getGeminiResponse(prompt);
-        case 'eliza':
-        default:
-            return getBotResponse(prompt);
-    }
+/**
+ * Gets a response from the currently selected AI model.
+ * @param {string} prompt - The user input to send to the AI model.
+ * @returns {Promise<string>} - The model's response text.
+ */
+export async function getAIResponse(user_prompt) {
+  switch (currentModel) {
+    case 'gemini':
+      return await getGeminiResponse(user_prompt);
+
+    case 'eliza':
+    default:
+      return getBotResponse(user_prompt);
+  }
+}
+
+async function getGeminiResponse(prompt) {
+  try {
+    const response = await fetch('/.netlify/functions/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
+    });
+    const data = await response.json();
+    return data.reply;
+  } catch (err) {
+    console.error('Gemini error:', err);
+    return 'Sorry, Gemini is unavailable right now.';
+  }
 }

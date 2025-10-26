@@ -1,5 +1,6 @@
 import { getAIResponse } from './aiManager.js';
 import { getBotResponse } from './eliza.js';
+import { setModel } from './aiManager.js';
 
 /**
   * ChatController - Mediates between model and view
@@ -59,7 +60,7 @@ export class ChatController {
             this.listView.renderMessage(newMessage);
 
             // Generate bot response
-            const botText = getBotResponse(text);
+            const botText = getAIResponse(text);
 
             // Add the bot message
             const botMessage = this.model.add(botText, 'bot');
@@ -96,7 +97,7 @@ export class ChatController {
 
         // If there’s a bot reply, update it too
         if (nextMessage && nextMessage.sender === 'bot') {
-            const newBotText = getBotResponse(newText);
+            const newBotText = getAIResponse(newText);
             this.model.edit(nextMessage.id, newBotText);
         }
 
