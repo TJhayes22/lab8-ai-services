@@ -20,3 +20,6 @@ doc/generated/
 # Logs
 logs
 *.log
+
+# env file
+.env

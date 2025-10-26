@@ -1,3 +1,4 @@
+import { getAIResponse } from './aiManager.js';
 import { getBotResponse } from './eliza.js';
 
 /**
