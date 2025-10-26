@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
-export default async function handler(req, res) {
+export async function handler(event, context) {
   try {
     // Get the API key from Netlify environment variables
     const apiKey = process.env.GEMINI_API_KEY;
@@ -11,10 +11,13 @@ export default async function handler(req, res) {
     const ai = new GoogleGenAI({ apiKey });
 
     // Parse incoming prompt
-    const { prompt } = JSON.parse(req.body);
+    const { prompt } = JSON.parse(event.body);
     if (!prompt || typeof prompt !== "string") {
-      return res.status(400).json({ error: "Invalid prompt" });
-    }
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ error: "Invalid prompt"}),
+        }
+    };
 
     // Generate response
     const response = await ai.models.generateContent({
@@ -25,10 +28,16 @@ export default async function handler(req, res) {
     // Access the generated text safely
     const text = response?.content?.[0]?.text || "No response";
 
-    return res.status(200).json({ text });
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ text }),
+    };
 
   } catch (err) {
     console.error("Gemini error:", err);
-    return res.status(500).json({ error: err.message });
+    return {
+        statusCode: 500,
+        body: JSON.stringify({ error: err.message }),
+    };
   }
 }
