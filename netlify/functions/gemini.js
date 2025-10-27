@@ -1,3 +1,4 @@
+// @netlify-function-bundler: esbuild
 import { GoogleGenAI } from "@google/genai";
 
 export async function handler(event) {
