@@ -32,10 +32,10 @@ async function getGeminiResponse(user_prompt) {
     const response = await fetch('/.netlify/functions/gemini', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_prompt }),
+      body: JSON.stringify({ prompt: user_prompt }),
     });
     const data = await response.json();
-    return data.reply;
+    return data.text;
   } catch (err) {
     console.error('Gemini error:', err);
     return 'Sorry, Gemini is unavailable right now.';
