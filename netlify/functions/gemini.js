@@ -10,6 +10,11 @@ export async function handler(event) {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: prompt,
+    config: {
+      thinkingConfig: {
+        thinkingBudget: 0, // Disables thinking
+      },
+    }
   });
 
   const text = response.text;
