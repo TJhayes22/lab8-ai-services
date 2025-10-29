@@ -11,14 +11,14 @@ test.describe('Netlify Chat App (Gemini + Eliza)', () => {
   test('Gemini model responds with a message', async ({ page }) => {
     const chat = page.locator('chat-view');
 
-    // Select Gemini model inside shadow root
+    // Select Gemini model inside shadow root (Playwright automatically does this)
     await chat.locator('#bot-services').selectOption('gemini');
 
     // Fill and send message
     await chat.locator('#message-box').fill('Explain AI in one sentence');
     await chat.locator('#send-button').click();
 
-    // Expect a Gemini-like response (loose check)
+    // Expect a Gemini-like response
     const botResponse = chat.locator('.bot-message:last-child');
     await expect(botResponse).toHaveText(/ai|intelligence|computer|learn/i, {
       timeout: 20000,
@@ -35,7 +35,7 @@ test.describe('Netlify Chat App (Gemini + Eliza)', () => {
     await chat.locator('#send-button').click();
 
     const botResponse = chat.locator('.bot-message:last-child');
-    // Change expect later...
+
     await expect(botResponse).toContainText(/hello|why|you|feel|tell/i, {
       timeout: 8000,
     });

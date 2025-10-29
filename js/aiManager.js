@@ -27,6 +27,15 @@ export async function getAIResponse(user_prompt) {
   }
 }
 
+/**
+ * Sends a user prompt to the Gemini API via a Netlify function
+ * and returns the generated response text.
+ *
+ * @async
+ * @param {string} user_prompt - The text prompt input by the user.
+ * @returns {Promise<string>} The response text from Gemini, 
+ * or an error message if the request fails.
+ */
 async function getGeminiResponse(user_prompt) {
   try {
     const response = await fetch('/.netlify/functions/gemini', {
