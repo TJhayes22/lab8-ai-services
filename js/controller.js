@@ -1,5 +1,4 @@
 import { getAIResponse } from './aiManager.js';
-import { getBotResponse } from './eliza.js';
 import { setModel } from './aiManager.js';
 
 /**
@@ -37,6 +36,12 @@ export class ChatController {
         this.listView.addEventListener('chat-import', () => this.importChat());
 
         this.listView.addEventListener('chat-export', () => this.exportChat());
+
+        this.listView.addEventListener('model-change', (e) => {
+            const { model } = e.detail;
+            setModel(model);
+            console.log(`Switched to model: ${model}`);
+        });
     }
 
     /**

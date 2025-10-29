@@ -20,6 +20,7 @@ export class ChatView extends HTMLElement {
                     --bot-bubble: #d7d9e1;
                     --grey: #888;
                     --page-background: #6970d6;
+                    --gradient-background: radial-gradient(circle, #6970d6, #3d2ea8, #9a6ad6);
                     --white: #ffffff;
                     --bot-text-color: #333;
                     --user-text-color: #ffffff;
@@ -34,7 +35,7 @@ export class ChatView extends HTMLElement {
                     display: flex;
                     height: 100%;
                     width: 100%;
-                    background-color: var(--page-background);
+                    background: var(--gradient-background);
                     font-family: var(--font-family);
                 }
 
@@ -60,7 +61,7 @@ export class ChatView extends HTMLElement {
                 }
 
                 header h1 {
-                    font-size: 2rem;
+                    font-size: 2.25rem;
                     margin: 0;
                     font-weight: 600;
                 }
@@ -70,6 +71,26 @@ export class ChatView extends HTMLElement {
                     margin: 0;
                     margin-top: 0.5rem;
                 }
+                
+                header label, header select {
+                    margin-top: 0.5rem;
+                }
+
+                select {
+                    background-color: var(--white);
+                    border: 1px solid var(--grey);
+                    border-radius: 4px;
+
+                    color: black;
+                    font-size: 0.9rem;
+                    cursor: pointer;
+                    transition: border-color 0.2s;
+                }
+
+                select:hover {
+                    border-color: var(--page-background);
+                }
+
 
                 main {
                     background-color: var(--white);
@@ -243,11 +264,14 @@ export class ChatView extends HTMLElement {
                     padding: var(--spacing-base);
                     border-bottom-left-radius: var(--border-radius);
                     border-bottom-right-radius: var(--border-radius);
-                    text-align: center;
 
                     margin-left: var(--margin-base);
                     margin-right: var(--margin-base);
                     margin-bottom: var(--margin-base);
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 4px;
                 }
 
                 chat-footer button {
@@ -280,10 +304,14 @@ export class ChatView extends HTMLElement {
                 }
 
                 #message-count {
-                    font-size: 0.9rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1rem;
                     color: var(--white);
                     background-color: var(--primary-color);
-                    padding: 6px;
+                    border-radius: 10px;
+                    padding: 4px 8px;
                 }
 
             </style>
@@ -291,7 +319,11 @@ export class ChatView extends HTMLElement {
             <container>
                 <header id="chat-header">
                     <h1>Chat Application</h1>
-                    <p>MVC Architecture with CRUD Operations</p>
+                    <label for="bot-services">AI Model:</label>
+                    <select id="bot-services">
+                        <option value="gemini" selected>Gemini</option>
+                        <option value="eliza">Eliza</option>
+                    </select>
                 </header>
 
                 <main>
@@ -323,6 +355,7 @@ export class ChatView extends HTMLElement {
         this.messageBox = this.shadowRoot.getElementById('message-box');
         this.chatWindow = this.shadowRoot.getElementById('chat-window');
         const footer = this.shadowRoot.querySelector('chat-footer');
+        const selector = this.shadowRoot.getElementById('bot-services');
 
         // Store handlers as properties so they can be removed later
         this._sendHandler = () => {
@@ -360,11 +393,18 @@ export class ChatView extends HTMLElement {
             }
         };
 
+        this._selectorHandler = (e) => {
+            const selectedModel = e.target.value;
+
+            this.dispatchEvent(new CustomEvent('model-change', { detail: { model: selectedModel}}));
+        }
+
         // Attach all listeners
         sendButton.addEventListener('click', this._sendHandler);
         this.messageBox.addEventListener('keypress', this._keypressHandler);
         this.chatWindow.addEventListener('click', this._chatClickHandler);
         footer.addEventListener('click', this._footerClickHandler);
+        selector.addEventListener('change', this._selectorHandler);
 
         this.messageBox.focus();
     }
