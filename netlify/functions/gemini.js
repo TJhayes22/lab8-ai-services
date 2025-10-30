@@ -10,6 +10,7 @@ export async function handler(event) {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: prompt,
+    maxTokens: 300,
     config: {
       thinkingConfig: {
         thinkingBudget: 0, // Disables thinking
@@ -18,7 +19,6 @@ export async function handler(event) {
   });
 
   const text = response.text;
-  console.log(response.text);
 
   return {
     statusCode: 200,

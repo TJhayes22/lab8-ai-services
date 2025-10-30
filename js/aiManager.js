@@ -1,6 +1,5 @@
 import { getBotResponse } from './eliza.js';
 
-
 let currentModel = 'gemini';
 
 /**
