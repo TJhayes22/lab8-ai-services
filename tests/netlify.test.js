@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const NETLIFY_URL = 'https://lab8chatbot.netlify.app/'; // replace with your real link
+const NETLIFY_URL = 'https://lab8chatapp.netlify.app/';
 
 test.describe('Netlify Chat App (Gemini + Eliza)', () => {
   
