@@ -19,7 +19,7 @@ This made Gemini a great fit for integrating AI-generated responses into the cha
 ---
 
 ## Live Demo
-[**View the app on Netlify →**](https://lab8chatbot.netlify.app/)
+[**View the app on Netlify →**](https://lab8chatapp.netlify.app/)
 
 ---
 
